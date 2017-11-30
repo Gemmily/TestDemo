@@ -23,6 +23,8 @@ public class CustomView extends View {
     private Paint mShadowPaint;
     private Paint mTextPaint;
     private Bitmap mBitmap;
+    private final int diameter = 500;
+    private final int padding = 20;
 
     public CustomView(Context context) {
         super(context);
@@ -106,7 +108,7 @@ public class CustomView extends View {
         // specMode
         // EXACTLY AI_MOST UNSPECIFIED
 
-        setMeasuredDimension(300, 300);
+        setMeasuredDimension(diameter, diameter);
         // 设置子View实际的宽高
         // 在setMeasuredDimension()方法调用之后
         // 才能使用getMeasuredWidth()和getMeasuredHeight()来获取视图测量出的宽高，以此之前调用这两个方法得到的值都会是0。
@@ -122,7 +124,7 @@ public class CustomView extends View {
         int size = MeasureSpec.getSize(measureSpec);
         switch (mode) {
             case MeasureSpec.UNSPECIFIED:
-                // 指定大小
+                //
                 mSize = defaultSize;
                 break;
             case MeasureSpec.AT_MOST:
@@ -130,7 +132,7 @@ public class CustomView extends View {
                 mSize = size;
                 break;
             case MeasureSpec.EXACTLY:
-                // match_content
+                // match_content 指定大小
                 mSize = size;
                 break;
         }
@@ -155,10 +157,31 @@ public class CustomView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         // 绘画
-        RectF rectF = new RectF(20, 20, 280, 280);
+        RectF rectF = new RectF(padding, padding, diameter - padding, diameter - padding);
         canvas.drawArc(rectF, 135, 270, false, mShadowPaint);
         canvas.drawArc(rectF, 135, 120, false, mArcPaint);
-        canvas.drawText("test", rectF.centerX() - 30, 200, mTextPaint);
-        canvas.drawBitmap(mBitmap, rectF.centerX() - mBitmap.getWidth() / 2, 200, mShadowPaint);
+        canvas.drawText("test", rectF.centerX() - padding, diameter - 4 * padding, mTextPaint);
+        canvas.drawBitmap(mBitmap, rectF.centerX() - mBitmap.getWidth() / 2, diameter - 4 * padding, mShadowPaint);
+    }
+
+    private void initAnimation() {
+        // 3种动画效果
+        // Tween Animation(只能对View进行操作 有透明 移动 缩放 旋转四种效果 )
+        // FrameAnimation(将多张图片连贯播放)
+        // PropertyAnimation(改变属性值来实动画效果)
+
+        // ValueAnimator 属性动画机制的核心类 计算初始值结束值之间过度动画
+        // 耗时300ms 从0过度到1
+        //  final ValueAnimator animator = ValueAnimator.ofFloat(0f, 1f);
+        //        animator.setDuration(300);
+        //        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+        //            @Override
+        //            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+        //                float currentValue = (float) animator.getAnimatedValue();
+        //            }
+        //        });
+        //        animator.start();
+        // 设置动画的重复次数
+        // animator.setRepeatCount();
     }
 }
