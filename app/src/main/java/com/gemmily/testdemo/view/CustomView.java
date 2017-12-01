@@ -9,7 +9,9 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Scroller;
 
 import com.gemmily.testdemo.R;
 
@@ -25,6 +27,8 @@ public class CustomView extends View {
     private Bitmap mBitmap;
     private final int diameter = 500;
     private final int padding = 20;
+    private int lastX, lastY;
+    private Scroller mScroller;
 
     public CustomView(Context context) {
         super(context);
@@ -63,6 +67,7 @@ public class CustomView extends View {
         mTextPaint.setColor(Color.BLACK);
         mTextPaint.setTextSize(40);
         getBitmap();
+        mScroller = new Scroller(getContext());
     }
 
     private void getBitmap() {
@@ -183,5 +188,32 @@ public class CustomView extends View {
         //        animator.start();
         // 设置动画的重复次数
         // animator.setRepeatCount();
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        int x = (int) event.getX();
+        int y = (int) event.getY();
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                lastX = x;
+                lastY = y;
+                break;
+            case MotionEvent.ACTION_MOVE:
+                int offsetX = x - lastX;
+                int offsetY = y - lastY;
+               /*
+                *1.
+                layout(getLeft() + offsetX, getTop() + offsetY, getRight() + offsetX, getBottom() + offsetY);
+                *2.
+                offsetLeftAndRight(offsetX);
+                offsetTopAndBottom(offsetY);
+                */
+                ((View) getParent()).scrollBy(-offsetX, -offsetY);
+                break;
+            case MotionEvent.ACTION_UP:
+                break;
+        }
+        return true;
     }
 }
