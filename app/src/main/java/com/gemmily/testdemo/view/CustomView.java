@@ -1,5 +1,6 @@
 package com.gemmily.testdemo.view;
 
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -7,11 +8,11 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
+import android.icu.text.DecimalFormat;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Scroller;
 
 import com.gemmily.testdemo.R;
 
@@ -26,9 +27,13 @@ public class CustomView extends View {
     private Paint mTextPaint;
     private Bitmap mBitmap;
     private final int diameter = 500;
-    private final int padding = 20;
+    private final int padding = 30;
     private int lastX, lastY;
-    private Scroller mScroller;
+    private ValueAnimator mProgressAnimator;
+    // 当前弧度
+    private float mCurrentAngel;
+    private String mCurrent = "0.0%";
+    private DecimalFormat mDecimalFormat;
 
     public CustomView(Context context) {
         super(context);
@@ -66,8 +71,9 @@ public class CustomView extends View {
         mTextPaint = new Paint();
         mTextPaint.setColor(Color.BLACK);
         mTextPaint.setTextSize(40);
+        mDecimalFormat = new DecimalFormat("0.0");
         getBitmap();
-        mScroller = new Scroller(getContext());
+        initAnimation();
     }
 
     private void getBitmap() {
@@ -164,8 +170,9 @@ public class CustomView extends View {
         // 绘画
         RectF rectF = new RectF(padding, padding, diameter - padding, diameter - padding);
         canvas.drawArc(rectF, 135, 270, false, mShadowPaint);
-        canvas.drawArc(rectF, 135, 120, false, mArcPaint);
+        canvas.drawArc(rectF, 135, mCurrentAngel, false, mArcPaint);
         canvas.drawText("test", rectF.centerX() - padding, diameter - 4 * padding, mTextPaint);
+        canvas.drawText(mCurrent, rectF.centerX() - padding, rectF.centerY(), mTextPaint);
         canvas.drawBitmap(mBitmap, rectF.centerX() - mBitmap.getWidth() / 2, diameter - 4 * padding, mShadowPaint);
     }
 
@@ -188,6 +195,18 @@ public class CustomView extends View {
         //        animator.start();
         // 设置动画的重复次数
         // animator.setRepeatCount();
+        mProgressAnimator = new ValueAnimator().ofFloat(0, 60);
+        mProgressAnimator.setDuration(3000);
+        mProgressAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                float current = (float) valueAnimator.getAnimatedValue();
+                mCurrent = mDecimalFormat.format(current) + "%";
+                mCurrentAngel = current * 270 / 100;
+                invalidate();
+            }
+        });
+
     }
 
     @Override
@@ -215,5 +234,9 @@ public class CustomView extends View {
                 break;
         }
         return true;
+    }
+
+    public void startProgressAnimation() {
+        mProgressAnimator.start();
     }
 }
