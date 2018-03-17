@@ -33,7 +33,6 @@ public class CustomView extends View {
     // 当前弧度
     private float mCurrentAngel;
     private String mCurrent = "0.0%";
-    private DecimalFormat mDecimalFormat;
 
     public CustomView(Context context) {
         super(context);
@@ -71,7 +70,6 @@ public class CustomView extends View {
         mTextPaint = new Paint();
         mTextPaint.setColor(Color.BLACK);
         mTextPaint.setTextSize(40);
-        mDecimalFormat = new DecimalFormat("0.0");
         getBitmap();
         initAnimation();
     }
@@ -201,7 +199,7 @@ public class CustomView extends View {
             @Override
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
                 float current = (float) valueAnimator.getAnimatedValue();
-                mCurrent = mDecimalFormat.format(current) + "%";
+                mCurrent = current * 4 / 3 + "%";
                 mCurrentAngel = current * 270 / 100;
                 invalidate();
             }

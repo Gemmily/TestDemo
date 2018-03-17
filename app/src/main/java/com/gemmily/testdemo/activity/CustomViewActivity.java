@@ -17,27 +17,20 @@ import butterknife.OnClick;
  */
 
 public class CustomViewActivity extends AppCompatActivity {
-    public static final String CUSTOM_VIEW = "CUSTOM_VIEW";
-    public static final String CUSTOM_VIEW_PAGER = "CUSTOM_VIEW_PAGER";
-    @BindView(R.id.btn_click)
-    Button btnClick;
+
+
     @BindView(R.id.view_custom)
     CustomView viewCustom;
+    @BindView(R.id.btn_click)
+    Button btnClick;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        String type = getIntent().getStringExtra("type");
-        switch (type) {
-            case CUSTOM_VIEW:
-                setContentView(R.layout.view_custom_view);
-                break;
-            case CUSTOM_VIEW_PAGER:
-                setContentView(R.layout.view_custom_view_pager);
-                break;
-        }
+        setContentView(R.layout.view_custom_view);
         ButterKnife.bind(this);
     }
+
 
     @OnClick(R.id.btn_click)
     public void onViewClicked() {

@@ -25,17 +25,21 @@ public class MainActivity extends BaseActivity {
         ButterKnife.bind(this);
     }
 
-    @OnClick({R.id.tv_view, R.id.tv_viewpager})
+    @OnClick({R.id.tv_view, R.id.tv_viewpager, R.id.tv_delete, R.id.tv_swiper})
     public void onViewClicked(View view) {
-        Intent intent = new Intent(this, CustomViewActivity.class);
         switch (view.getId()) {
             case R.id.tv_view:
-                intent.putExtra("type", CustomViewActivity.CUSTOM_VIEW);
+                startActivity( new Intent(this, CustomViewActivity.class));
                 break;
             case R.id.tv_viewpager:
-                intent.putExtra("type", CustomViewActivity.CUSTOM_VIEW_PAGER);
+                startActivity( new Intent(this, CustomPagerActivity.class));
+                break;
+            case R.id.tv_delete:
+                startActivity(new Intent(this, DeleteViewActivity.class));
+                break;
+            case R.id.tv_swiper:
+                startActivity(new Intent(this, SwiperActivity.class));
                 break;
         }
-        startActivity(intent);
     }
 }
