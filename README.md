@@ -1,4 +1,4 @@
-####RxJava2
+#### RxJava2
 ------
 一个可以在JVM上使用， 基于事件编写可使用观察序列构成的**异步**作库。
 
@@ -8,7 +8,7 @@ compile 'io.reactivex.rxjava2:rxjava:2.0.1'
 compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
 ```
 
-#### 初步认识RxJava
+## 初步认识RxJava
 **RxJava**的核心便是被观察者`Observable`发出一系列的事件，观察者`Observer`，通过`subscribe()`方法进行订阅接收事件并进行处理。
 
 ```java
@@ -155,8 +155,8 @@ api.request("/user/smscode", requestBody)
 运行过程中将`Disposable`保存起来，当`Activity`退出时，切断它即可。
 >RxJava中已经内置了一个容器`CompositeDisposable`，当有多个`Disposable`时，每当得到一个`Disposable`时就调用`CompositeDisposable.add()`将它添加到容器中。在退出时，调用`CompositeDisposable.clear() `即可切断所有联系。
 
-####操作符
-#####Map
+#### 操作符
+##### Map
 对`Observable`发送的每一个事件应用一个函数, 使得每一个事件都按照**指定函数**去变化。
 
 ```java
@@ -179,7 +179,7 @@ Observable.create(new ObservableOnSubscribe<Integer>() {
             }
         });
 ```
-#####FlatMap
+##### FlatMap
 `FlatMap`将一个发送事件的`Observable`变换为**多个**发送事件的`Observables`，然后将它们发射的事件**合并**后放进一个单独的`Observable`里。
 ```java
   RequestBody.DataBean dataBean = new RequestBody.DataBean();
@@ -240,9 +240,9 @@ Observable.create(new ObservableOnSubscribe<Integer>() {
 >`FlatMap`并不保证事件的顺序, 如果需要保证顺序则需要使用`concatMap`。
 >
 
-#####Simple
+##### Simple
 每隔指定的时间就从Observable中取出一个事件发送给Observer处理。
-#####Zip
+##### Zip
 `Zip`通过一个函数将多个`Observable`发送的事件**按顺序结合到一起**，然后它**按照顺序**发送这些事件。
 
 * 组合的过程是**分别从**两组`Observable`**各取出一个事件**来进行组合，并且一个事件**只能被使用一次**，组合的顺序是严格按照**事件发送的顺序来进行的**，也就是说不会出现A组事件1和B组事件2进行合并。
@@ -333,8 +333,8 @@ Observable.create(new ObservableOnSubscribe<Integer>() {
 应用场景
 比如一个界面需要展示的信息, 是要从两个服务器接口中获取, 且都获取到了之后才可展示, 这个时候就可以用`Zip`。
 
-####Backpressure
-#####背压的引入
+#### Backpressure
+##### 背压的引入
 使用场景
 如果`Observable`发送事件特别快且无限循环发送事件，而`Observer`只能按顺序处理事件，那么待处理的发送事件储存在哪，且储存容量是多少？
 
@@ -401,7 +401,7 @@ observable
 因为只有**发送、接收事件**运行在**不同的**线程中，且发送事件的速度**大于**接收事件的速度时，才会产生背压问题。
 >事件产生的速度远远快于事件消费的速度，最终导致数据积累越来越多，从而导致OOM等异常。
 
-#####Flowable
+##### Flowable
 在解决背压的时候使用`Flowable`和`Subscribe`，
 `Flowable`发送事件，`Subscriber`接收事件，仍通过`subscribe()`连接。
 
@@ -425,7 +425,7 @@ observable
 * **onBackpressureDrop()**        `BackpressureStrategy.DROP`
 * **onBackpressureLatest()** `BackpressureStrategy.LATEST`
 
-#####Subscription
+##### Subscription
 `Subscription`是`onSubscribe（）` 回调参数，与`Disposable`作用相同，调用`Subscription.cancel()`也可以取消订阅关系，且多了个`request()`方法。
 
 ```java
